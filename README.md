@@ -13,3 +13,4 @@ I built this clone using Javasript, react, next, redux, firestor-firebase, authe
 
 
 - Create Sidebar
+the chat for every person is a complete component.
