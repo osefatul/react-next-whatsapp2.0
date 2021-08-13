@@ -12,8 +12,9 @@ I built this clone using Javasript, react, next, redux, firestor-firebase, authe
 	* npm install @material-ui/icons
 
 
-- Create Sidebar
+## Create Sidebar
 * the chat for every person is a complete component we have to define inside the Sidebar.
 * the chat will starts working based on the email address you are giving to it.
 * we used email validator to validate the email if it is in correct form.  npm install email-validator
-* 
+* we used react-firebase-hooks in order to have access to auth, sotorage and firestore.
+* for loading better-react-spinkit is used
