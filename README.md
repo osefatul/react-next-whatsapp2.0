@@ -15,4 +15,5 @@ I built this clone using Javasript, react, next, redux, firestor-firebase, authe
 - Create Sidebar
 * the chat for every person is a complete component we have to define inside the Sidebar.
 * the chat will starts working based on the email address you are giving to it.
-* we used email validator to validate the email if it is in correct form.
+* we used email validator to validate the email if it is in correct form.  npm install email-validator
+* 
