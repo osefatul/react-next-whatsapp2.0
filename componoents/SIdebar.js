@@ -5,6 +5,15 @@ import { Chat, MoreVert } from "@material-ui/icons";
 import SearchIcon from "@material-ui/icons/search";
 
 function Sidebar() {
+  const createChat = () => {
+    const input = prompt(
+      `Please enter the Email address of the user you want to chat with`
+    );
+
+    //if there is no input then stop the code below from execution
+    if (!input) return null;
+  };
+
   return (
     <Container>
       <Header>
