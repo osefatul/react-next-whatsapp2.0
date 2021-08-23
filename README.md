@@ -18,3 +18,39 @@ I built this clone using Javasript, react, next, redux, firestor-firebase, authe
 * we used email validator to validate the email if it is in correct form.  npm install email-validator
 * we used react-firebase-hooks in order to have access to auth, sotorage and firestore.
 * for loading better-react-spinkit is used
+
+
+
+
+* Once the user sign in for the first time, I want to capture them and their details. thats where we will use useEffect
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
