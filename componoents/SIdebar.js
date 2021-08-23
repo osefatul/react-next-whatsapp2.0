@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Avatar, Button, IconButton } from "@material-ui/core";
 import { Chat, MoreVert } from "@material-ui/icons";
 import SearchIcon from "@material-ui/icons/search";
 import * as EmailValidator from "email-validator";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useCollection } from "react-firebase-hooks/firestore";
 
 function Sidebar() {
+  // get the current user mapping
+  const [user] = useAuthState(auth);
+
+  //goes to our file "chats" in the database and query the users array check where the user email who logged in is.
+  const userChatRef = db
+    .collection("chats")
+    .where("users", "array-contains", user.email);
+  //real time listener for the chats
+  const [chatSnapshot] = useCollection(userChatRef);
   const createChat = () => {
     const input = prompt(
       `Please enter the Email address of the user you want to chat with`
@@ -15,12 +26,26 @@ function Sidebar() {
     //if there is no input then stop the code below from execution
     if (!input) return null;
 
-    //check if the email is validated or in a correct form,enecccbduifubevjblhhffkujeifhluvcnfttgfjnbhn
-    if (EmailValidator.validate(input)) {
+    //check if the email is validated or in a correct form.
+    //while creating a chat make sure, the email is valid and input email is not equal to the current login user.
+    if (EmailValidator.validate(input) && input !== user.email) {
       // we need to add the caht into the database "chat" collection.
+
+      db.collection("chats").add({
+        users: [user.email, input],
+      });
     }
   };
 
+  const chatAlreadyExists = (recipienEmail) => {
+    //chatSnapshot could not be defined as it is asynchronous.
+    //go to the snapshots which means the chats that exists and then filter and find inside the user array if the user is find with the recipient email the one we typed in to input.
+    // !! convert value to boolean, means if the value was returned this will be true otherwise false
+    !!chatSnapshot?.docs.find(
+      (chat) =>
+        chat.data().users.find((user) => user === recipienEmail)?.length > 0
+    );
+  };
   return (
     <Container>
       <Header>
