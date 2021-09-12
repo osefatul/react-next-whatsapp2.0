@@ -5,22 +5,28 @@ import styled from "styled-components";
 import getRecipientEmail from "../utils/getRecipientEmail";
 import { auth, db } from "../firebase";
 import { useCollection } from "react-firebase-hooks/firestore";
+import { useRouter } from "next/router";
 
 function Chat({ id, users }) {
   const [user] = useAuthState(auth);
+  const router = useRouter();
 
   //in order to use correct image for an email we will use recipientSnapshot
   const [recipientSnapshot] = useCollection(
     db.collection("users").where("email", "==", getRecipientEmail(users, user))
   );
-
   const recipient = recipientSnapshot?.docs?.[0]?.data();
 
   //it will pass an array of emails and array of those who logged in
   const recipientEmail = getRecipientEmail(users, user);
 
+  //Enter a new chatRoom
+  const enterChat = () => {
+    router.push(`/chat/${id}`);
+  };
+
   return (
-    <Container>
+    <Container onClick={enterChat}>
       {recipient ? (
         <UserAvatar src={recipient?.photoURL} />
       ) : (
