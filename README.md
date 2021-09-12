@@ -29,7 +29,8 @@ I built this clone using Javasript, react, next, redux, firestor-firebase, authe
 * while creating a chat make sure, the email is valid and input email is not equal to the current login user.
 * and also check if the chat already exists.
 
-*
+#### Utility function
+* we will use a utility function for recipient emails. it will pass an array of emails and array of those who logged in
 
 
 
