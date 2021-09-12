@@ -3,17 +3,29 @@ import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import styled from "styled-components";
 import getRecipientEmail from "../utils/getRecipientEmail";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
+import { useCollection } from "react-firebase-hooks/firestore";
 
 function Chat({ id, users }) {
   const [user] = useAuthState(auth);
+
+  //in order to use correct image for an email we will use recipientSnapshot
+  const [recipientSnapshot] = useCollection(
+    db.collection("users").where("email", "==", getRecipientEmail(users, user))
+  );
+
+  const recipient = recipientSnapshot?.docs?.[0]?.data();
 
   //it will pass an array of emails and array of those who logged in
   const recipientEmail = getRecipientEmail(users, user);
 
   return (
     <Container>
-      <UserAvatar />
+      {recipient ? (
+        <UserAvatar src={recipient?.photoURL} />
+      ) : (
+        <UserAvatar>{recipientEmail[0]}</UserAvatar>
+      )}
       <p>{recipientEmail}</p>
     </Container>
   );

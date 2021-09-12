@@ -58,8 +58,8 @@ function Sidebar() {
   return (
     <Container>
       <Header>
-        {/*logout if it click*/}
-        <UserAvatar onClick={() => auth.signOut()} />
+        {/*logout if it clicks*/}
+        <UserAvatar src={user.photoURL} onClick={() => auth.signOut()} />
 
         <IconContainer>
           <IconButton>
