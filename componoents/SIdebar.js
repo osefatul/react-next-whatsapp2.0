@@ -38,7 +38,7 @@ function Sidebar() {
       !chatAlreadyExists(input) &&
       input !== user.email
     ) {
-      // we need to add the caht into the database "chat" collection.
+      // we need to add the chat into the database "chat" collection.
       db.collection("chats").add({
         users: [user.email, input],
       });
@@ -48,6 +48,7 @@ function Sidebar() {
   const chatAlreadyExists = (recipienEmail) => {
     //chatSnapshot could not be defined as it is asynchronous.
     //go to the snapshots which means the chats that exists and then filter and find inside the user array if the user is find with the recipient email the one we typed in to input.
+
     // !! convert value to boolean, means if the value was returned this will be true otherwise false
     !!chatSnapshot?.docs.find(
       (chat) =>

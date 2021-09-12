@@ -24,9 +24,12 @@ I built this clone using Javasript, react, next, redux, firestor-firebase, authe
 
 * Once the user sign in for the first time, I want to capture them and their details. thats where we will use useEffect
 
-### Chats
+### chat room creating in a sidebar
 * get the user from the authentication of the firestore and then get an email of the current user from it.
-* while creating a chat make sure, the email is valid and input email is not equal to the current login user and also check if the chat already exists.
+* while creating a chat make sure, the email is valid and input email is not equal to the current login user.
+* and also check if the chat already exists.
+
+*
 
 
 
