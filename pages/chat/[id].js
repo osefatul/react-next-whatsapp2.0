@@ -40,7 +40,7 @@ export async function getServerSideProps(context) {
     .map((doc) => ({ id: doc.id, ...doc.data() }))
     .map((messages) => ({
       ...messages,
-      timestamp: messages.timestamp.toData().getTime(), // when we stringify a timestamp from API to a client we lose the timestamp data type
+      timestamp: messages.timestamp.toDate().getTime(), // when we stringify a timestamp from API to a client we lose the timestamp data type
     }));
 
   //Prep the Chat:

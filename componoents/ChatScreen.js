@@ -8,6 +8,8 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { useState } from "react";
 import Message from "./Message";
 
+import firebase from "firebase";
+
 function ChatScreen({ chat, messages }) {
   const [user] = useAuthState(auth);
   const router = useRouter();
@@ -30,9 +32,14 @@ function ChatScreen({ chat, messages }) {
           user={message.data().user}
           message={{
             ...message.data(),
-            timestamp: message.data().timestamp?.toData().getTime(),
+            timestamp: message.data().timestamp?.toDate().getTime(),
           }}
         />
+      ));
+    } else {
+      //if there are no messages available then create one
+      return JSON.parse(messages).map((message) => (
+        <Message key={message.id} user={message.user} message={message} />
       ));
     }
   };
@@ -50,7 +57,7 @@ function ChatScreen({ chat, messages }) {
 
     //Add a message
     db.collection("chats").doc(router.query.id).collection("messages").add({
-      timestamp: firebase.firestore.FieldValue.serverTimestamp,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       message: input,
       user: user.email,
       photoURL: user.photoURL,
@@ -87,8 +94,7 @@ function ChatScreen({ chat, messages }) {
       <InputContainer>
         <InsertEmoticon />
         <Input value={input} onChange={(e) => setInput(e.target.value)} />
-        <button hidden disabled={!input} type="submit">
-          onClick={sendMessage}
+        <button hidden disabled={!input} type="submit" onClick={sendMessage}>
           Send Message
         </button>
         <Mic />
@@ -139,7 +145,7 @@ const InputContainer = styled.form`
   background-color: white;
   z-index: 100;
 `;
-const Input = styled.div`
+const Input = styled.input`
   flex: 1;
   outline: 0;
   border: none;
