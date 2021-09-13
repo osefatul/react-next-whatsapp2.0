@@ -1,13 +1,38 @@
 import { useAuthState } from "react-firebase-hooks/auth";
 import styled from "styled-components";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { useRouter } from "next/router";
 import { Avatar, IconButton } from "@material-ui/core";
-import { AttachFile, MoreVert } from "@material-ui/icons";
+import { AttachFile, InsertEmoticon, Mic, MoreVert } from "@material-ui/icons";
+import { useCollection } from "react-firebase-hooks/firestore";
 
 function ChatScreen({ chat, messages }) {
   const [user] = useAuthState(auth);
   const router = useRouter();
+
+  //get the snapshot of the messages we have in the chat
+  const [messagesSnapshot] = useCollection(
+    db
+      .collection("chats")
+      .doc(router.query.id) //route depends on the chat we are currently in
+      .collection("messages")
+      .orderBy("timestamp", "asc")
+  );
+
+  const showMessage = () => {
+    if (messagesSnapshot) {
+      return messagesSnapshot.docs.map((message) => (
+        <Message
+          key={message.id}
+          user={message.data().user}
+          message={{
+            ...message.data(),
+            timestamp: message.data().timestamp?.toData().getTime(),
+          }}
+        />
+      ));
+    }
+  };
   return (
     <Container>
       <Header>
@@ -28,9 +53,15 @@ function ChatScreen({ chat, messages }) {
       </Header>
 
       <MessageContainer>
-        {/* function for showing messages */}
+        {showMessage()}
         <EndOfMessage />
       </MessageContainer>
+
+      <InputContainer>
+        <InsertEmoticon />
+        <Input />
+        <Mic />
+      </InputContainer>
     </Container>
   );
 }
@@ -64,3 +95,22 @@ const HeaderInformations = styled.div`
 const HeaderIcons = styled.div``;
 const MessageContainer = styled.div``;
 const EndOfMessage = styled.div``;
+const InputContainer = styled.form`
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  z-index: 100;
+`;
+const Input = styled.div`
+  flex: 1;
+  outline: 0;
+  border: none;
+  border-radius: 10px;
+  background-color: whitesmoke;
+  padding: 20px;
+  margin-left: 15px;
+  margin-right: 15px;
+`;
