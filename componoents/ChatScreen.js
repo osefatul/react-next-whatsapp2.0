@@ -9,8 +9,10 @@ import { useState } from "react";
 import Message from "./Message";
 
 import firebase from "firebase";
+import getRecipientEmail from "../utils/getRecipientEmail";
 
 function ChatScreen({ chat, messages }) {
+  console.log(chat, messages);
   const [user] = useAuthState(auth);
   const router = useRouter();
   const [input, setInput] = useState("");
@@ -22,6 +24,12 @@ function ChatScreen({ chat, messages }) {
       .doc(router.query.id) //route depends on the chat we are currently in
       .collection("messages")
       .orderBy("timestamp", "asc")
+  );
+
+  const [recipientSnapshot] = useCollection(
+    db
+      .collection("users")
+      .where("email", "==", getRecipientEmail(chat.users, user))
   );
 
   const showMessages = () => {
@@ -67,13 +75,17 @@ function ChatScreen({ chat, messages }) {
     setInput("");
   };
 
+  const recipient = recipientSnapshot?.docs?.[0];
+
+  //get email of the we opened its chat
+  const recipientEmail = getRecipientEmail(chat.users, user);
   return (
     <Container>
       <Header>
         <Avatar />
 
         <HeaderInformations>
-          <h3>Rec Email</h3>
+          <h3>{recipientEmail}</h3>
           <p>Last Seen...</p>
         </HeaderInformations>
         <HeaderIcons>
