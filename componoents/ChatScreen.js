@@ -10,12 +10,14 @@ import Message from "./Message";
 import TimeAgo from "timeago-react";
 import firebase from "firebase";
 import getRecipientEmail from "../utils/getRecipientEmail";
+import { useRef } from "react";
 
 function ChatScreen({ chat, messages }) {
   console.log(chat, messages);
   const [user] = useAuthState(auth);
   const router = useRouter();
   const [input, setInput] = useState("");
+  const endOfMessagesRef = useRef(null);
 
   //get the snapshot of the messages we have in the chat
   const [messagesSnapshot] = useCollection(
@@ -52,6 +54,14 @@ function ChatScreen({ chat, messages }) {
     }
   };
 
+  //use this whenever we have message this always should allow the page to go to the last message or scroll down automatically
+  const scrollToBottom = () => {
+    endOfMessagesRef.current.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
   const sendMessage = (e) => {
     e.preventDefault();
 
@@ -73,6 +83,9 @@ function ChatScreen({ chat, messages }) {
 
     //once we added a message to the chat then clean the input
     setInput("");
+
+    //once a message is send it will be added to the messages window so to scroll automatically down we call the below function:
+    scrollToBottom();
   };
 
   const recipient = recipientSnapshot?.docs?.[0]?.data();
@@ -115,7 +128,7 @@ function ChatScreen({ chat, messages }) {
 
       <MessageContainer>
         {showMessages()}
-        <EndOfMessage />
+        <EndOfMessage ref={endOfMessagesRef} />
       </MessageContainer>
 
       <InputContainer>
@@ -162,7 +175,9 @@ const MessageContainer = styled.div`
   background-color: #e5ded8;
   min-height: 90vh;
 `;
-const EndOfMessage = styled.div``;
+const EndOfMessage = styled.div`
+  margin-bottom: 50px;
+`;
 const InputContainer = styled.form`
   display: flex;
   align-items: center;
