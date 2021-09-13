@@ -5,10 +5,13 @@ import { useRouter } from "next/router";
 import { Avatar, IconButton } from "@material-ui/core";
 import { AttachFile, InsertEmoticon, Mic, MoreVert } from "@material-ui/icons";
 import { useCollection } from "react-firebase-hooks/firestore";
+import { useState } from "react";
+import Message from "./Message";
 
 function ChatScreen({ chat, messages }) {
   const [user] = useAuthState(auth);
   const router = useRouter();
+  const [input, setInput] = useState("");
 
   //get the snapshot of the messages we have in the chat
   const [messagesSnapshot] = useCollection(
@@ -19,7 +22,7 @@ function ChatScreen({ chat, messages }) {
       .orderBy("timestamp", "asc")
   );
 
-  const showMessage = () => {
+  const showMessages = () => {
     if (messagesSnapshot) {
       return messagesSnapshot.docs.map((message) => (
         <Message
@@ -33,6 +36,30 @@ function ChatScreen({ chat, messages }) {
       ));
     }
   };
+
+  const sendMessage = (e) => {
+    e.preventDefault();
+
+    //update the last Seen
+    db.collection("users").doc(user.uid).set(
+      {
+        lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
+      },
+      { merge: true }
+    );
+
+    //Add a message
+    db.collection("chats").doc(router.query.id).collection("messages").add({
+      timestamp: firebase.firestore.FieldValue.serverTimestamp,
+      message: input,
+      user: user.email,
+      photoURL: user.photoURL,
+    });
+
+    //once we added a message to the chat then clean the input
+    setInput("");
+  };
+
   return (
     <Container>
       <Header>
@@ -53,13 +80,17 @@ function ChatScreen({ chat, messages }) {
       </Header>
 
       <MessageContainer>
-        {showMessage()}
+        {showMessages()}
         <EndOfMessage />
       </MessageContainer>
 
       <InputContainer>
         <InsertEmoticon />
-        <Input />
+        <Input value={input} onChange={(e) => setInput(e.target.value)} />
+        <button hidden disabled={!input} type="submit">
+          onClick={sendMessage}
+          Send Message
+        </button>
         <Mic />
       </InputContainer>
     </Container>
