@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 
-import Sidebar from "../componoents/SIdebar";
+import Sidebar from "../componoents/Sidebar";
 
 export default function Home() {
   return (

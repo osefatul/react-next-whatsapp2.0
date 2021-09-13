@@ -8,7 +8,7 @@ import * as EmailValidator from "email-validator";
 import { auth, db } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection } from "react-firebase-hooks/firestore";
-import Chat from "../componoents/Chat";
+import Chat from "./Chat";
 
 function Sidebar() {
   // get the current user mapping

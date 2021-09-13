@@ -31,10 +31,8 @@ I built this clone using Javasript, react, next, redux, firestor-firebase, authe
 #### Utility function
 * we will use a utility function for recipient emails. it will pass an array of emails and array of those who logged in
 #### Using Route
-* In Next.js we can use useRoute() hook for a new stack of page or a new router.
-
-
-
+* In Next.js we can use useRoute() hook for a new stack of page or a new router. we use this router in order to open a new page for a new chat
+* Inside the pages each file represents a route. we used chat directory to use wildcard for the ids.[id].js
 
 
 
