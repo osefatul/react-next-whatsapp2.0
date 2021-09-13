@@ -7,7 +7,7 @@ import { AttachFile, InsertEmoticon, Mic, MoreVert } from "@material-ui/icons";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useState } from "react";
 import Message from "./Message";
-
+import TimeAgo from "timeago-react";
 import firebase from "firebase";
 import getRecipientEmail from "../utils/getRecipientEmail";
 
@@ -75,18 +75,33 @@ function ChatScreen({ chat, messages }) {
     setInput("");
   };
 
-  const recipient = recipientSnapshot?.docs?.[0];
+  const recipient = recipientSnapshot?.docs?.[0]?.data();
 
   //get email of the we opened its chat
   const recipientEmail = getRecipientEmail(chat.users, user);
   return (
     <Container>
       <Header>
-        <Avatar />
+        {recipient ? (
+          <Avatar src={recipient?.photoURL} />
+        ) : (
+          <Avatar>{recipientEmail[0]}</Avatar>
+        )}
 
         <HeaderInformations>
           <h3>{recipientEmail}</h3>
-          <p>Last Seen...</p>
+          {recipientSnapshot ? (
+            <p>
+              Last Active: {""}{" "}
+              {recipient?.lastSeen?.toDate() ? (
+                <TimeAgo datetime={recipient?.lastSeen?.toDate()} />
+              ) : (
+                "Unavailable"
+              )}{" "}
+            </p>
+          ) : (
+            <p>Loading last Active ....</p>
+          )}
         </HeaderInformations>
         <HeaderIcons>
           <IconButton>
