@@ -1,10 +1,12 @@
 # WhatsApp clone:
 
-I built this clone using Javasript, react, next, redux, firestor-firebase, authentication-firebase, storage-firebase...
+### Intro
+I built this clone to apply my MERN stack and firebase knowledge, We also used server-side rendering concept in this project. Feel free to explore. 
 
-- We used nextJs. we will introduce and explore nextJs at the same time.
-- Pages directory - is for the rout pages. dont create any component file there. 
-- components directory will be here for components files.
+### Details 
+We used nextJs. we will introduce and explore nextJs at the same time.
+Pages directory - is for the rout pages. dont create any component file there. 
+components directory will be here for components files.
 
 
 - we will be using styled and Material UI components for css styling.
