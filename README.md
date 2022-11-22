@@ -3,6 +3,14 @@
 ### Intro
 I built this clone to apply my MERN stack and firebase knowledge, We also used server-side rendering concept in this project. Feel free to explore. 
 
+### Techs
+- NextJs
+- Firebase
+- Styled-Components
+- MUI
+
+
+
 ### Details 
 We used nextJs. we will introduce and explore nextJs at the same time.
 Pages directory - is for the rout pages. dont create any component file there. 
